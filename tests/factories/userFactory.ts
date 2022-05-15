@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { faker } from '@faker-js/faker';
+import faker from '@faker-js/faker';
 
 import { prisma } from '../../src/database';
 import { generateToken } from '../../src/utils/generateToken';
@@ -9,7 +9,8 @@ async function createUserBody() {
         username: faker.name.findName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
-        avatar: faker.internet.url(),
+        avatar: 'https://http.cat/422.jpg',
+        subtitle: faker.lorem.paragraph(),
     };
 
     return user;
@@ -23,6 +24,7 @@ async function createUser() {
             email: user.email,
             password: bcrypt.hashSync(user.password, 10),
             avatar: user.avatar,
+            subtitle: user.subtitle,
         },
     });
     insertedUser.password = user.password;
