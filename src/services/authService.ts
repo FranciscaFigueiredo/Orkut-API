@@ -7,18 +7,7 @@ import UnauthorizedError from '../errors/UnauthorizedError';
 import { UserAuthData, UserInsertData, UserLogin } from '../interfaces/User';
 import * as authRepository from '../repositories/authRepository';
 import { generateToken } from '../utils/generateToken';
-
-async function findByEmail(email: string): Promise<User> {
-    const searchByEmail = await authRepository.findByEmail(email);
-
-    return searchByEmail;
-}
-
-async function findById(id: number): Promise<User> {
-    const user = await authRepository.findById(id);
-
-    return user;
-}
+import * as userService from './userService';
 
 async function registration(createUser: UserInsertData): Promise<User> {
     const {
@@ -29,7 +18,7 @@ async function registration(createUser: UserInsertData): Promise<User> {
         password,
     } = createUser;
 
-    const searchByEmail = await findByEmail(email);
+    const searchByEmail = await userService.findByEmail(email);
 
     if (searchByEmail) {
         throw new ConflictError('This email already exists');
@@ -54,7 +43,7 @@ async function authentication(authUserInfo: UserAuthData): Promise<UserLogin> {
         password,
     } = authUserInfo;
 
-    const user = await findByEmail(email);
+    const user = await userService.findByEmail(email);
 
     if (!user) {
         throw new UnauthorizedError('Incorrect email or password');
@@ -79,8 +68,6 @@ async function authentication(authUserInfo: UserAuthData): Promise<UserLogin> {
 }
 
 export {
-    findByEmail,
-    findById,
     registration,
     authentication,
 };

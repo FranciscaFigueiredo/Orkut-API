@@ -23,8 +23,8 @@ model FriendshipRequest {
   sender                                     Int
   status                                     Boolean @default(false)
   
-  users_friendship_requests_recipientTousers User   @relation("friendship_requests_recipient_to_users", fields: [recipient], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendship_requests_fk0")
-  users_friendship_requests_senderTousers    User   @relation("friendship_requests_sender_to_users", fields: [sender], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendship_requests_fk1")
+  usersFriendshipRequestsRecipientTousers User   @relation("friendship_requests_recipient_to_users", fields: [recipient], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendship_requests_fk0")
+  usersFriendshipRequestsRenderTousers    User   @relation("friendship_requests_sender_to_users", fields: [sender], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendship_requests_fk1")
 
   @@map("friendship_requests")
 }
@@ -35,7 +35,8 @@ model Friendship {
   friendId                            Int @map("friend_id")
   usersFriendshipsFriendIdToUsers     User @relation("friendships_friend_id_to_users", fields: [friendId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendships_fk1")
   usersFriendshipsUserIdToUsers       User @relation("friendships_user_id_to_users", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friendships_fk0")
-
+  
+  users User[]
   @@map("friendships")
 }
 
@@ -51,19 +52,21 @@ model Testimonial {
 }
 
 model User {
-  id                                                       Int                   @id @default(autoincrement())
-  username                                                 String
-  email                                                    String                @unique
-  password                                                 String
-  avatar                                                   String
-  subtitle                                                 String?
-  friendshipRequests_friendshipRequestsRecipientToUsers    FriendshipRequest[] @relation("friendship_requests_recipient_to_users")
-  friendshipRequestsFriendshipRequestsSenderToUsers        FriendshipRequest[] @relation("friendship_requests_sender_to_users")
-  friendshipsFriendshipsFriendIdToUsers                    Friendship[]         @relation("friendships_friend_id_to_users")
-  friendshipsFriendshipsUserIdToUsers                      Friendship[]         @relation("friendships_user_id_to_users")
-  testimonialsTestimonialsRecipientToUsers                 Testimonial[]        @relation("testimonials_recipient_to_users")
-  testimonialsTestimonialsSenderToUsers                    Testimonial[]        @relation("testimonials_sender_to_users")
-  communities                                              Community[]         @relation("community_to_user")
+    id                                                       Int                   @id @default(autoincrement())
+    username                                                 String
+    email                                                    String                @unique
+    password                                                 String
+    avatar                                                   String
+    subtitle                                                 String?
+    friendshipRequests_friendshipRequestsRecipientToUsers    FriendshipRequest[] @relation("friendship_requests_recipient_to_users")
+    friendshipRequestsFriendshipRequestsSenderToUsers        FriendshipRequest[] @relation("friendship_requests_sender_to_users")
+    friendshipsFriendshipsFriendIdToUsers                    Friendship[]         @relation("friendships_friend_id_to_users")
+    friendshipsFriendshipsUserIdToUsers                      Friendship[]         @relation("friendships_user_id_to_users")
+    testimonialsTestimonialsRecipientToUsers                 Testimonial[]        @relation("testimonials_recipient_to_users")
+    testimonialsTestimonialsSenderToUsers                    Testimonial[]        @relation("testimonials_sender_to_users")
+    communities                                              Community[]         @relation("community_to_user")
 
-  @@map("users")
+    friendship Friendship[]
+
+    @@map("users")
 }

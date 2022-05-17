@@ -8,7 +8,7 @@ import { app } from '../../src/app';
 
 describe('POST /users/registration', () => {
     beforeEach(async () => {
-        await prisma.$executeRaw`TRUNCATE TABLE users;`;
+        await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`;
     });
 
     afterAll(async () => {
@@ -17,6 +17,7 @@ describe('POST /users/registration', () => {
 
     it('should returns status 201 and persist the user for a valid body', async () => {
         const body = await userFactory.createUserBody();
+        
         const result = await supertest(app).post('/users/registration').send(body);
         expect(result.status).toEqual(201);
     });
@@ -38,7 +39,7 @@ describe('POST /users/registration', () => {
 
 describe('POST /users/authentication', () => {
     beforeEach(async () => {
-        await prisma.$executeRaw`TRUNCATE TABLE users;`;
+        await prisma.$executeRaw`TRUNCATE TABLE users CASCADE;`;
     });
 
     afterAll(async () => {
@@ -68,6 +69,8 @@ describe('POST /users/authentication', () => {
         const body = await userFactory.createUserBody();
         body.password = faker.internet.password();
         delete body.username;
+        delete body.avatar;
+        delete body.subtitle;
 
         const result = await supertest(app).post('/users/authentication').send(body);
         expect(result.status).toEqual(401);

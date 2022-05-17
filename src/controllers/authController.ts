@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserAuthData, UserInsertData } from '../interfaces/User';
 import * as authService from '../services/authService';
+import * as userService from '../services/userService';
 
 async function signUp(req: Request, res: Response): Promise<Response> {
     const {
@@ -39,7 +40,7 @@ async function login(req: Request, res: Response): Promise<Response> {
 async function getUserInfo(req: Request, res: Response): Promise<Response> {
     const userId = res.locals.user;
 
-    const token = await authService.findById(userId);
+    const token = await userService.findById(userId);
 
     return res.status(200).send(token);
 }

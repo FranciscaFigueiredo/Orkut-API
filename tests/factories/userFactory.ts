@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 import { prisma } from '../../src/database';
 import { generateToken } from '../../src/utils/generateToken';

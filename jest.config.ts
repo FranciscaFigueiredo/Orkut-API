@@ -7,6 +7,7 @@ export default {
         'ts-jest': {
             useESM: true,
         },
+        testTimeout: 100000,
     },
     moduleNameMapper: {
         '^(\\.{1,2}/.*)\\.js$': '$1',
