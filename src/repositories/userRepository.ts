@@ -1,11 +1,15 @@
 import { prisma } from "../database";
+import { FriendShipRequest } from "../interfaces/Friend";
 
 async function findUserFriends(id: number) {
     const friends = await prisma.friendship.findMany({
-        include: {
-            users: {
-                where: { id },
-            }
+        select: {
+            friend: {
+                select: {
+                    username: true,
+                    avatar: true,
+                }
+            },
         },
         where: { userId: id },
     });
@@ -13,18 +17,49 @@ async function findUserFriends(id: number) {
     return friends;
 }
 
-async function createNewFriendshipRequest(recipient: number, sender: number) {
+async function createNewFriendshipRequest(friendshipRequestData: FriendShipRequest) {
     const friendshipRequest = await prisma.friendshipRequest.create({
-        data: {
-            recipient,
-            sender,
-        }
+        data: friendshipRequestData,
     });
+    
+    return friendshipRequest;
+}
 
+async function deleteFriendRequest(friendRequest: number) {
+    const friendshipRequest = await prisma.friendshipRequest.delete({
+        where: {
+            id: friendRequest,
+        },
+    });
+    
+    return friendshipRequest;
+}
+
+async function findFriendRequestByRequestId(friendRequest: number) {
+    const friendshipRequest = await prisma.friendshipRequest.findFirst({
+        where: {
+            id: friendRequest,
+        },
+    });
+    
+    return friendshipRequest;
+}
+
+async function createFriendship(friendshipData: FriendShipRequest) {
+    const friendshipRequest = await prisma.friendship.create({
+        data: {
+            userId: friendshipData.sender,
+            friendId: friendshipData.recipient,
+        },
+    });
+    
     return friendshipRequest;
 }
 
 export {
     findUserFriends,
     createNewFriendshipRequest,
+    deleteFriendRequest,
+    findFriendRequestByRequestId,
+    createFriendship,
 };

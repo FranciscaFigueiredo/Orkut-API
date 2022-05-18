@@ -1,4 +1,6 @@
 import { User } from '@prisma/client';
+import NotFoundError from '../errors/NotFoundError';
+import { FriendShipRequest } from '../interfaces/Friend';
 
 import * as authRepository from '../repositories/authRepository';
 import * as userRepository from '../repositories/userRepository';
@@ -21,10 +23,24 @@ async function findFriendsByUserId(id: number) {
     return friends;
 }
 
-async function createNewFriendshipRequest(recipient: number, sender: number) {
-    const friendshipRequest = await userRepository.createNewFriendshipRequest(recipient, sender);
+async function createNewFriendshipRequest(friendshipData: FriendShipRequest) {
+    const friendshipRequest = await userRepository.createNewFriendshipRequest(friendshipData);
 
     return friendshipRequest;
+}
+
+async function acceptFriendRequest(request: number) {
+    const friendshipRequest = await userRepository.findFriendRequestByRequestId(request);
+
+    if (!friendshipRequest) {
+        throw new NotFoundError('');
+    }
+
+    const friendship = await userRepository.createFriendship(friendshipRequest);
+
+    await userRepository.deleteFriendRequest(request);
+
+    return friendship;
 }
 
 export {
@@ -32,4 +48,5 @@ export {
     findById,
     findFriendsByUserId,
     createNewFriendshipRequest,
+    acceptFriendRequest,
 };

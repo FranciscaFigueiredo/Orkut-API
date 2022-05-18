@@ -22,12 +22,22 @@ async function postNewFriendshipRequest(req: Request, res: Response): Promise<Re
     
     const { recipient } = req.params;
 
-    const friends = await userService.createNewFriendshipRequest(Number(recipient), sender);
+    const friendshipRequest = await userService.createNewFriendshipRequest({recipient: Number(recipient), sender});
 
-    return res.status(200).send(friends);
+    return res.status(200).send(friendshipRequest);
+}
+
+async function acceptFriendshipRequest(req: Request, res: Response): Promise<Response> {
+    const { request } = req.params;
+
+    const friendship = await userService.acceptFriendRequest(Number(request));
+
+    return res.status(200).send(friendship);
 }
 
 export {
     getUserInfo,
     getUserFriends,
+    postNewFriendshipRequest,
+    acceptFriendshipRequest,
 };
