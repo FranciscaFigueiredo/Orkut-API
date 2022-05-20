@@ -1,12 +1,13 @@
 {
-  "name": "repoprovas-api",
+  "name": "orkut-api",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
   "scripts": {
     "start:dev": "NODE_ENV=dev NODE_OPTIONS=--experimental-vm-modules npx nodemon src/server.ts",
+    "start:dev-migrate": "dotenv -e .env prisma migrate dev && NODE_ENV=production NODE_OPTIONS=--experimental-vm-modules ts-node src/server.ts",
     "test": "dotenv -e .env.test prisma db seed && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest -i",
-    "test-api": "dotenv -e .env.test prisma db seed && NODE_ENV=dev NODE_OPTIONS=--experimental-vm-modules jest -i --watchAll",
+    "test-api": "dotenv -e .env.test prisma db seed && NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest -i --watchAll",
     "test-e2e": "NODE_ENV=test npx nodemon src/server.ts",
     "migrate-dev": "dotenv -e .env.dev prisma migrate dev",
     "migrate-test": "dotenv -e .env.test prisma migrate dev",
@@ -17,7 +18,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Francisca Figueiredo",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^3.12.0",
