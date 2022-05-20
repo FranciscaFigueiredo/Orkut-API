@@ -9,10 +9,19 @@ async function getUserInfo(req: Request, res: Response): Promise<Response> {
     return res.status(200).send(token);
 }
 
+async function getUserProfile(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const user = await userService.findById(Number(id));
+
+    return res.status(200).send(user);
+}
+
 async function getUserFriends(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
     const userId = res.locals.user;
 
-    const friends = await userService.findFriendsByUserId(userId);
+    const friends = await userService.findFriendsByUserId(Number(id) | userId);
 
     return res.status(200).send(friends);
 }
@@ -37,6 +46,7 @@ async function acceptFriendshipRequest(req: Request, res: Response): Promise<Res
 
 export {
     getUserInfo,
+    getUserProfile,
     getUserFriends,
     postNewFriendshipRequest,
     acceptFriendshipRequest,

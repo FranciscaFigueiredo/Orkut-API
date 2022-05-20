@@ -6,6 +6,7 @@ async function findUserFriends(id: number) {
         select: {
             friend: {
                 select: {
+                    id: true,
                     username: true,
                     avatar: true,
                 }
