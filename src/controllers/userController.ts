@@ -44,10 +44,19 @@ async function acceptFriendshipRequest(req: Request, res: Response): Promise<Res
     return res.status(200).send(friendship);
 }
 
+async function getUsersData(req: Request, res: Response): Promise<Response> {
+    const username = req.query.username as string;
+
+    const users = await userService.findUsersData(username);
+
+    return res.status(200).send(users);
+}
+
 export {
     getUserInfo,
     getUserProfile,
     getUserFriends,
     postNewFriendshipRequest,
     acceptFriendshipRequest,
+    getUsersData,
 };

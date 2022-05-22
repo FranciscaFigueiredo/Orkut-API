@@ -6,6 +6,7 @@ import { auth } from '../middlewares/authMiddleware';
 const router = Router();
 
 router.get('/users', auth, userController.getUserInfo);
+router.get('/users/list', auth, userController.getUsersData);
 router.get('/users/:id/friends', auth, userController.getUserFriends);
 router.post('/users/:recipient/friendship', auth, userController.postNewFriendshipRequest);
 router.post('/friends/friendship/:request', auth, userController.acceptFriendshipRequest);
