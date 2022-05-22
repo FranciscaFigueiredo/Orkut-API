@@ -43,10 +43,17 @@ async function acceptFriendRequest(request: number) {
     return friendship;
 }
 
+async function findUsersData(username: string) {
+    const users = await userRepository.findUsers(username);
+
+    return users;
+}
+
 export {
     findByEmail,
     findById,
     findFriendsByUserId,
     createNewFriendshipRequest,
     acceptFriendRequest,
+    findUsersData,
 };

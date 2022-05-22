@@ -57,10 +57,29 @@ async function createFriendship(friendshipData: FriendShipRequest) {
     return friendshipRequest;
 }
 
+async function findUsers(username: string) {
+    const users = await prisma.user.findMany({
+        where: {
+            username: {
+                contains: username,
+                mode: 'insensitive',
+            },
+        },
+        select: {
+            id: true,
+            username: true,
+            avatar: true,
+        }
+    });
+    
+    return users;
+}
+
 export {
     findUserFriends,
     createNewFriendshipRequest,
     deleteFriendRequest,
     findFriendRequestByRequestId,
     createFriendship,
+    findUsers,
 };
