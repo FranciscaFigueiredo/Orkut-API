@@ -30,7 +30,7 @@ async function createNewFriendshipRequest(friendshipData: FriendShipRequest) {
 }
 
 async function acceptFriendRequest(request: number) {
-    const friendshipRequest = await userRepository.findFriendRequestByRequestId(request);
+    const friendshipRequest = await findFriendRequest(request);
 
     if (!friendshipRequest) {
         throw new NotFoundError('');
@@ -41,6 +41,18 @@ async function acceptFriendRequest(request: number) {
     await userRepository.deleteFriendRequest(request);
 
     return friendship;
+}
+
+async function findFriendRequest(user: number) {
+    const friendshipRequest = await userRepository.findFriendRequestByUserId(user);
+
+    return friendshipRequest;
+}
+
+async function findFriendship(user: number, friend: number) {
+    const friendshipRequest = await userRepository.findFriendship(user, friend);
+
+    return friendshipRequest;
 }
 
 async function findUsersData(username: string) {
@@ -55,5 +67,7 @@ export {
     findFriendsByUserId,
     createNewFriendshipRequest,
     acceptFriendRequest,
+    findFriendRequest,
+    findFriendship,
     findUsersData,
 };

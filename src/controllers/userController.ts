@@ -36,6 +36,22 @@ async function postNewFriendshipRequest(req: Request, res: Response): Promise<Re
     return res.status(200).send(friendshipRequest);
 }
 
+async function getFriendshipRequest(req: Request, res: Response): Promise<Response> {
+    const { user } = req.params;
+    
+    const friendshipRequest = await userService.findFriendRequest(Number(user));
+    
+    return res.status(200).send(friendshipRequest);
+}
+
+async function getFriendship(req: Request, res: Response): Promise<Response> {
+    const { user, friend } = req.params;
+    
+    const friendship = await userService.findFriendship(Number(user), Number(friend));
+    
+    return res.status(200).send(friendship);
+}
+
 async function acceptFriendshipRequest(req: Request, res: Response): Promise<Response> {
     const { request } = req.params;
 
@@ -57,6 +73,8 @@ export {
     getUserProfile,
     getUserFriends,
     postNewFriendshipRequest,
+    getFriendshipRequest,
+    getFriendship,
     acceptFriendshipRequest,
     getUsersData,
 };

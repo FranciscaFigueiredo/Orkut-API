@@ -36,6 +36,19 @@ async function deleteFriendRequest(friendRequest: number) {
     return friendshipRequest;
 }
 
+async function findFriendRequestByUserId(user: number) {
+    const friendshipRequest = await prisma.friendshipRequest.findFirst({
+        where: {
+            OR: [
+                { sender: user },
+                { recipient: user },
+            ]
+        },
+    });
+    
+    return friendshipRequest;
+}
+
 async function findFriendRequestByRequestId(friendRequest: number) {
     const friendshipRequest = await prisma.friendshipRequest.findFirst({
         where: {
@@ -75,11 +88,36 @@ async function findUsers(username: string) {
     return users;
 }
 
+async function findFriendship(user: number, friend: number) {
+    const friendship = await prisma.friendship.findFirst({
+        where: {
+            OR: [
+                {
+                    AND: [
+                        { userId: user },
+                        { friendId: friend },
+                    ]
+                },
+                {
+                    AND: [
+                        { userId: friend },
+                        { friendId: user },
+                    ]
+                },
+            ]
+        },
+    });
+    
+    return friendship;
+}
+
 export {
     findUserFriends,
     createNewFriendshipRequest,
     deleteFriendRequest,
+    findFriendRequestByUserId,
     findFriendRequestByRequestId,
     createFriendship,
     findUsers,
+    findFriendship,
 };

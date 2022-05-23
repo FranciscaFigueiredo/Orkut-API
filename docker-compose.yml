@@ -17,7 +17,7 @@ services:
         container_name: node_app
         build: . #Dockerfile do node se encontra na pasta atual
         ports:
-            - 5000:5000
+            - 80:5000
         depends_on:
             - db # só sobe quando o postgres tiver no ar
         env_file:
